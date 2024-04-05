@@ -1,0 +1,2 @@
+2024/04/05 17:33:09 [emerg] 1#1: host not found in upstream "proshop-v2-backend-1:5000" in /etc/nginx/nginx.conf:12
+2024/04/05 17:38:28 [emerg] 1#1: host not found in upstream "proshop-v2-backend-1:5000" in /etc/nginx/nginx.conf:12
