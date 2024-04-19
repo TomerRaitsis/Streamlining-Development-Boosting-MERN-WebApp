@@ -4,6 +4,11 @@ x-environment: &global_env
   MONGO_URI: ${MONGO_URI}
   NODE_ENV: ${NODE_ENV}
   JWT_SECRET: ${JWT_SECRET}
+  RABBITMQ_USER : ${RABBITMQ_USER}
+  RABBITMQ_PASSWORD : ${RABBITMQ_PASSWORD}
+  RABBITMQ_PORT : ${RABBITMQ_PORT}
+  RABBITMQ_QUEUE_NAME : ${RABBITMQ_QUEUE_NAME}
+  REDIS_URL : ${REDIS_URL}
 
 services:
   frontend:
@@ -17,11 +22,14 @@ services:
     build: .
     environment:
       <<: *global_env
+      REDIS_URL: redis://redis_cache:6379
     ports:
       - "5000"
     depends_on:
       - mongo
       - seed
+      - rabbitmq
+      - redis_cache
     restart: on-failure
     # Scale the backend service to have 3 instances
     deploy:
@@ -29,7 +37,7 @@ services:
   mongo:
     image: mongo
     ports:
-      - "27017:27017"
+      - "27018:27017"
     restart: on-failure
   nginx:
     image: nginx
@@ -50,3 +58,15 @@ services:
     depends_on:
       - mongo
     restart: on-failure
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: on-failure
+  redis_cache:
+    image: redis/redis-stack-server:latest
+    ports:
+      - "6379:6379"
+    restart: on-failure
+

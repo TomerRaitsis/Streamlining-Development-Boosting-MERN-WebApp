@@ -3,6 +3,7 @@ import Order from '../models/orderModel.js';
 import Product from '../models/productModel.js';
 import { calcPrices } from '../utils/calcPrices.js';
 import { verifyPayPalPayment, checkIfNewTransaction } from '../utils/paypal.js';
+import { cacheRequest } from '../../redis/cacheMiddleware.js';
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -63,6 +64,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
 // @access  Private
 const getMyOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find({ user: req.user._id });
+  cacheRequest(req, orders);
   res.json(orders);
 });
 
@@ -76,6 +78,7 @@ const getOrderById = asyncHandler(async (req, res) => {
   );
 
   if (order) {
+    cacheRequest(req, order);
     res.json(order);
   } else {
     res.status(404);
@@ -145,6 +148,7 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 const getOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find({}).populate('user', 'id name');
+  cacheRequest(req, orders);
   res.json(orders);
 });
 

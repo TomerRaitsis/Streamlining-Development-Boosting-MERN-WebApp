@@ -1,6 +1,7 @@
 import asyncHandler from '../middleware/asyncHandler.js';
 import generateToken from '../utils/generateToken.js';
 import User from '../models/userModel.js';
+import { cacheRequest } from '../../redis/cacheMiddleware.js';
 
 // @desc    Auth user & get token
 // @route   POST /api/users/auth
@@ -80,6 +81,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
     });
+    cacheRequest(req, user);
   } else {
     res.status(404);
     throw new Error('User not found');
@@ -119,6 +121,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 const getUsers = asyncHandler(async (req, res) => {
   const users = await User.find({});
+  cacheRequest(req, users);
   res.json(users);
 });
 
@@ -148,6 +151,7 @@ const getUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).select('-password');
 
   if (user) {
+    cacheRequest(req, user);
     res.json(user);
   } else {
     res.status(404);

@@ -9,6 +9,21 @@ import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
+import {connectToRabbitMQ} from './RabbitMQ/rabbitmq.js';
+
+
+
+
+
+MAKE THE Redis to log somewhere instead of console.log, maybe use rabbitMQ for it
+
+
+
+
+
+
+
+
 
 const port = process.env.PORT || 5000;
 
