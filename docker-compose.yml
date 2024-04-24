@@ -22,7 +22,6 @@ services:
     build: .
     environment:
       <<: *global_env
-      REDIS_URL: redis://redis_cache:6379
     ports:
       - "5000"
     depends_on:
@@ -59,10 +58,19 @@ services:
       - mongo
     restart: on-failure
   rabbitmq:
-    image: rabbitmq
+    image: rabbitmq:management
     ports:
       - "5672:5672"
       - "15672:15672"
+    restart: on-failure
+  rabbit_consumer:
+    build:
+      context: ./
+      dockerfile: ./backend/RabbitMQ/consumer/Dockerfile
+    environment:
+      <<: *global_env
+    depends_on:
+      - frontend
     restart: on-failure
   redis_cache:
     image: redis/redis-stack-server:latest

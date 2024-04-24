@@ -4,6 +4,7 @@ import Product from '../models/productModel.js';
 import { calcPrices } from '../utils/calcPrices.js';
 import { verifyPayPalPayment, checkIfNewTransaction } from '../utils/paypal.js';
 import { cacheRequest } from '../../redis/cacheMiddleware.js';
+import  { addToQueue } from '../RabbitMQ/producer/rabbitmq-producer.js';
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -54,6 +55,18 @@ const addOrderItems = asyncHandler(async (req, res) => {
     });
 
     const createdOrder = await order.save();
+
+      // Add the order to RabbitMQ queue for further processing
+    const orderMessage = {
+      orderId: createdOrder._id,
+      user: req.user._id,
+      itemsPrice,
+      totalPrice,
+      shippingAddress,
+      paymentMethod,
+    };
+
+    await addToQueue(orderMessage); // Send message to RabbitMQ queue
 
     res.status(201).json(createdOrder);
   }

@@ -7,8 +7,6 @@ const redisUrl = new URL(process.env.REDIS_URL || 'redis://localhost:6379');
 const redisHost = redisUrl.hostname;
 const redisPort = parseInt(redisUrl.port);
 
-console.log('Redis URL:', redisHost, redisPort);
-
 // Create the Redis client with the specified host and port
 const redisClient = createClient({
     url: process.env.REDIS_URL || 'redis://localhost:6379',
@@ -35,7 +33,7 @@ async function cacheRequest(req, responseData) {
 
         await redisClient.expire(cacheKey, 30); // Set an expiry time for the cache (e.g., 30 seconds)
 
-        console.log('Request and response cached:', cacheKey);
+        console.log('Request and response cached');
         
     } catch (error) {
         console.error('Error caching request and response:', error);
