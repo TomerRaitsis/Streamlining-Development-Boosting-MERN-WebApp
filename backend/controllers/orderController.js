@@ -4,7 +4,7 @@ import Product from '../models/productModel.js';
 import { calcPrices } from '../utils/calcPrices.js';
 import { verifyPayPalPayment, checkIfNewTransaction } from '../utils/paypal.js';
 import { cacheRequest } from '../../redis/cacheMiddleware.js';
-import  { addToQueue } from '../RabbitMQ/producer/rabbitmq-producer.js';
+import  { addToQueue } from '../RabbitMQ/rabbitmqController.js';
 
 // @desc    Create new order
 // @route   POST /api/orders
