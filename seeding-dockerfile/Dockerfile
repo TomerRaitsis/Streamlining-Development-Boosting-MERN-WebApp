@@ -11,7 +11,8 @@ COPY package*.json ./
 RUN npm install
 
 # Copy the rest of the application code
-COPY . .
+COPY backend/ backend/
+COPY redis redis/
 
 # Set the command to run your application
 CMD [ "npm", "run", "data:import" ]

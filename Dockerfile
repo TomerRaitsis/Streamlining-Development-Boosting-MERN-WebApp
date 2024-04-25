@@ -11,7 +11,8 @@ COPY package*.json ./
 RUN npm install
 
 # Copy the rest of the application code
-COPY . .
+COPY backend/ backend/
+COPY redis redis/
 
 # Expose port (if needed)
 EXPOSE 5000

@@ -78,8 +78,7 @@ async function cacheMiddleware(req, res, next) {
 // Function to delete cache keys containing a specific string
 async function deleteKeysContainingString(searchString) {
     try {
-        const keys = await redisClient.sendCommand(["keys",`*${searchString}*`]);
-        console.log(keys);
+        const keys = await redisClient.sendCommand(["keys",`*${searchString}*`]); // Get all keys containing the search string
 
         // Delete keys that contain the search string
         if (keys.length > 0) {
