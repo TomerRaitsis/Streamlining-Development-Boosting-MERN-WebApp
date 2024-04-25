@@ -65,9 +65,8 @@ async function cacheMiddleware(req, res, next) {
         }
         else {
             console.log('Request method is not GET');
-            console.log('Deleting cache');
-            deleteKeys(); // Delete cache keys containing a specific string
-            console.log('Cache deleted');
+            const paramsString = (req.baseUrl).split('/')[2]; // Extract the string from the URL
+            deleteKeysContainingString(paramsString); // Delete cache keys containing a specific string
             next();
         }
     } catch (error) {
@@ -77,9 +76,21 @@ async function cacheMiddleware(req, res, next) {
 }
 
 // Function to delete cache keys containing a specific string
-async function deleteKeys(searchString) {
+async function deleteKeysContainingString(searchString) {
     try {
-        await redisClient.sendCommand(["flushall"]);
+        const keys = await redisClient.sendCommand(["keys",`*${searchString}*`]);
+        console.log(keys);
+
+        // Delete keys that contain the search string
+        if (keys.length > 0) {
+            keys.forEach(async key => {
+                // Delete the key
+                await redisClient.expire(key, 0);
+            });
+            console.log(`Deleted ${keys.length} keys containing "${searchString}".`);
+        } else {
+            console.log(`No keys containing "${searchString}" found.`);
+        }
     } catch (error) {
         console.error('Error deleting keys:', error);
     }
