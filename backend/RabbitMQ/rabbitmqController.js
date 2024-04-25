@@ -21,7 +21,6 @@ async function connectToRabbitMQ() {
         connection = await amqp.connect(`amqp://${rabbitmqConfig.username}:${rabbitmqConfig.password}@${rabbitmqConfig.hostname}:${rabbitmqConfig.port}`, () => {
             console.log('Connected to RabbitMQ!!');
         });
-        console.log('Connected to RabbitMQ!');
     }
     if (!channel) {
         channel = await connection.createChannel();
@@ -44,7 +43,7 @@ async function addToQueue(message) {
             { persistent: true } // Persistent messages ensure durability
         );
 
-        console.log('Message added to queue:', message);
+        console.log('Message added to queue!');
     } catch (error) {
         console.error('Error adding message to queue:', error);
         throw error; 
@@ -76,6 +75,7 @@ async function consumeMessages() {
       });
     } catch (error) {
       console.error('Error consuming messages:', error);
+      throw error; 
     }
   }
   

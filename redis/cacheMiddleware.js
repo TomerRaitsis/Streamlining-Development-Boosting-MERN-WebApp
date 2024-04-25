@@ -25,13 +25,13 @@ console.log('Connected to Redis server');
 async function cacheRequest(req, responseData) {
     try {
         // Serialize the request data (e.g., URL, query parameters, headers) and response data
-        const cacheKey = JSON.stringify({ url: req.url, params: req.params, query: req.query, body: req.body });
+        const cacheKey = JSON.stringify({ baseUrl: req.baseUrl, url: req.url, params: req.params, query: req.query, body: req.body });
         const cacheValue = JSON.stringify(responseData);
 
         // Cache the request and response data in Redis
         await redisClient.set(cacheKey, cacheValue); 
 
-        await redisClient.expire(cacheKey, 30); // Set an expiry time for the cache (e.g., 30 seconds)
+        await redisClient.expire(cacheKey, 60); // Set an expiry time for the cache (e.g., 30 seconds)
 
         console.log('Request and response cached');
         
@@ -47,7 +47,7 @@ async function cacheMiddleware(req, res, next) {
         // Check if the request method is GET
         if (req.method === 'GET') {
             // Serialize the request data to generate the cache key
-            const cacheKey = JSON.stringify({ url: req.url, params: req.params, query: req.query, body: req.body });
+            const cacheKey = JSON.stringify({ baseUrl: req.baseUrl, url: req.url, params: req.params, query: req.query, body: req.body });
 
             // Check if data exists in Redis cache
             const cachedData = await redisClient.get(cacheKey);
@@ -63,9 +63,25 @@ async function cacheMiddleware(req, res, next) {
                 next();
             }
         }
+        else {
+            console.log('Request method is not GET');
+            console.log('Deleting cache');
+            deleteKeys(); // Delete cache keys containing a specific string
+            console.log('Cache deleted');
+            next();
+        }
     } catch (error) {
         console.error('Error in cacheMiddleware:', error);
         next(error);
+    }
+}
+
+// Function to delete cache keys containing a specific string
+async function deleteKeys(searchString) {
+    try {
+        await redisClient.sendCommand(["flushall"]);
+    } catch (error) {
+        console.error('Error deleting keys:', error);
     }
 }
 

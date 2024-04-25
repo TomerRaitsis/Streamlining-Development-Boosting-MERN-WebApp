@@ -21,11 +21,11 @@ router.post('/logout', logoutUser);
 router
   .route('/profile')
   .get(protect, cacheMiddleware, getUserProfile)
-  .put(protect, updateUserProfile);
+  .put(protect, cacheMiddleware, updateUserProfile);
 router
   .route('/:id')
-  .delete(protect, admin, deleteUser)
+  .delete(protect, admin, cacheMiddleware, deleteUser)
   .get(protect, admin, cacheMiddleware, getUserById)
-  .put(protect, admin, updateUser);
+  .put(protect, admin, cacheMiddleware, updateUser);
 
 export default router;

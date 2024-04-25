@@ -6,7 +6,7 @@ dotenv.config();
 const app = express();
 const port = 3001;
 
-console.log('Starting consumer server...' ,process.env.RABBITMQ_USER);
+console.log('Starting consumer server...');
 
 
 app.listen(port, async () => {
@@ -16,5 +16,6 @@ app.listen(port, async () => {
         consumeMessages(); // Start consuming messages
     } catch (error) {
         console.error('Failed to connect to RabbitMQ:', error);
+        throw error; 
     }
 });

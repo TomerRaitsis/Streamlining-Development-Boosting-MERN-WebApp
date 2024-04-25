@@ -13,13 +13,13 @@ import { protect, admin } from '../middleware/authMiddleware.js';
 import checkObjectId from '../middleware/checkObjectId.js';
 import { cacheMiddleware } from '../../redis/cacheMiddleware.js';
 
-router.route('/').get(cacheMiddleware, getProducts).post(protect, admin, createProduct);
-router.route('/:id/reviews').post(protect, checkObjectId, createProductReview);
+router.route('/').get(cacheMiddleware, getProducts).post(protect, admin, cacheMiddleware, createProduct);
+router.route('/:id/reviews').post(protect, cacheMiddleware, checkObjectId, createProductReview);
 router.get('/top', cacheMiddleware, getTopProducts);
 router
   .route('/:id')
   .get(cacheMiddleware, checkObjectId, getProductById)
-  .put(protect, admin, checkObjectId, updateProduct)
-  .delete(protect, admin, checkObjectId, deleteProduct);
+  .put(protect, admin, cacheMiddleware, checkObjectId, updateProduct)
+  .delete(protect, admin, cacheMiddleware, checkObjectId, deleteProduct);
 
 export default router;

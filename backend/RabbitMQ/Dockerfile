@@ -35,4 +35,4 @@ COPY . .
 EXPOSE 3000
 
 # Add a command that waits 40 seconds before starting the Node.js script
-CMD sh -c "echo 'Waiting for 40 seconds...'; sleep 40; node ./backend/RabbitMQ/consumer_server.js"
+CMD ["node", "./backend/RabbitMQ/consumer_server.js"]
