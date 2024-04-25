@@ -27,5 +27,7 @@ frontend/build
 uploads/*png
 uploads/*jpg
 
+nginx/logs
+
 # API tests
 http
