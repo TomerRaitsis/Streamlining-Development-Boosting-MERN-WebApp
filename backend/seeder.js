@@ -10,10 +10,16 @@ import connectDB from './config/db.js';
 
 dotenv.config();
 
-connectDB();
+console.log("started");
+console.log(process.env.MONGO_URI);
+await connectDB();
+console.log("done");
+
 
 const importData = async () => {
   try {
+    console.log("in func");
+
     await Order.deleteMany();
     await Product.deleteMany();
     await User.deleteMany();

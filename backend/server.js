@@ -9,16 +9,26 @@ import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
+import cors from 'cors';
 
 const port = process.env.PORT || 5000;
 
-connectDB();
+//connectDB();
 
-const app = express();
+const app = express(); 
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// Middleware function to log request arrival
+const logRequestArrival = (req, res, next) => {
+  console.log('A request has arrived:', req.method, req.url);
+  next(); // Pass control to the next middleware function
+};
+
+app.use(logRequestArrival);
 
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
