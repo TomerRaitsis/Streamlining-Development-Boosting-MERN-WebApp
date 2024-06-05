@@ -21,6 +21,8 @@ async function baseQueryWithAuth(args, api, extra) {
   return result;
 }
 
+console.log('BASE_URL:', BASE_URL);
+
 export const apiSlice = createApi({
   baseQuery: baseQueryWithAuth, // Use the customized baseQuery
   tagTypes: ['Product', 'Order', 'User'],
