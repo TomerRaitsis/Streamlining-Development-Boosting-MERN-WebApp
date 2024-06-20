@@ -1,12 +1,32 @@
 pipeline {
     agent any
 
+    environment {
+        AWS_DEFAULT_REGION = 'eu-central-1'  // Update with your AWS region
+    }
+
     stages {
-        stage('Verify Clone') {
+        stage('Authenticate to AWS') {
             steps {
-                // List files to verify the repository is cloned
-                sh 'ls -la'
+                script {
+                    // Run AWS CLI command to list ECR repositories
+                    def awsCliCommand = "aws ecr describe-repositories --output json"
+                    def awsCliOutput = sh(script: awsCliCommand, returnStdout: true).trim()
+
+                    // Print AWS CLI output
+                    echo "AWS ECR Repositories:"
+                    echo awsCliOutput
+                }
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'AWS authentication and ECR repositories listing succeeded!'
+        }
+        failure {
+            echo 'AWS authentication or ECR repositories listing failed!'
         }
     }
 }
