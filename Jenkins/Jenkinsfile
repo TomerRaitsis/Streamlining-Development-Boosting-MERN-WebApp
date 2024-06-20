@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('AWS ECR Describe Repositories') {
             steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: '96f68e7a-e3cb-4e97-97ac-472f07edf015']]) {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AKIAXMMDRHSK27H36ICN (AWS creds)']]) {
                     sh 'aws ecr describe-repositories --output json'
                 }
             }
