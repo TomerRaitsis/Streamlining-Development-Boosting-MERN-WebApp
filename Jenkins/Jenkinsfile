@@ -18,7 +18,7 @@ pipeline {
                 
 
                 // Build Docker image
-                sh "docker run hello-world"  
+                sh "docker run --name hello-world --detach --env DOCKER_TLS_VERIFY=0 hello-world"  
             }
         }
         
