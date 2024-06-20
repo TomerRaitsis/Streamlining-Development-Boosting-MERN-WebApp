@@ -47,8 +47,8 @@ pipeline {
                 //     dir('path/to/db-seeding') {
                 //         sh "docker build -t $imageNameDB:$tagDB ."
                 //         sh "docker tag $imageNameDB:$tagDB $registry/$imageNameDB:$tagDB"
-                    }
-                }
+                //     }
+                // }
             }
         }
         
