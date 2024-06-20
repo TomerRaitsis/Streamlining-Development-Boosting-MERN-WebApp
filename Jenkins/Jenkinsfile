@@ -11,17 +11,10 @@ pipeline {
     stages {
         stage('Build and Tag Docker Images') {
             steps {
-
-                sh "ls"
-
-                sh "pwd"
-                
-
-                // Build Docker image
-                sh "docker run --name hello-world --detach --env DOCKER_TLS_VERIFY=0 hello-world"  
+                 script {
+                    docker.image('hello-world').run()
             }
         }
         
-        // Add more stages as needed
     }
 }
