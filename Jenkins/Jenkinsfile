@@ -5,6 +5,9 @@ pipeline {
         stage('Run Hello World') {
             steps {
                 script {
+                    sh 'docker --version'
+                    
+                    sh 'ls'
                     // Set DOCKER_TLS_VERIFY to 0 to disable TLS verification
                     env.DOCKER_TLS_VERIFY = '0'
                     
