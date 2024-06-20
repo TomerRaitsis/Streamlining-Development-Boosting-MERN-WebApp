@@ -3,6 +3,7 @@ pipeline {
     
     environment {
         AWS_DEFAULT_REGION = 'eu-central-1'
+        registry = '507618868373.dkr.ecr.eu-central-1.amazonaws.com'
 
     }
     
