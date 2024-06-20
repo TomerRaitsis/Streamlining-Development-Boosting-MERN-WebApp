@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'docker:latest'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
-        }
-    }
+    agent any
     
     stages {
         stage('Run Hello World') {
@@ -13,11 +8,9 @@ pipeline {
                     sh 'docker --version'
                     
                     sh 'ls'
-                    // Set DOCKER_TLS_VERIFY to 0 to disable TLS verification
-                    env.DOCKER_TLS_VERIFY = '0'
-                    
+
                     // Run hello-world Docker container
-                    sh 'docker run -d hello-world'
+                    sh 'docker run hello-world'
                 }
             }
         }
