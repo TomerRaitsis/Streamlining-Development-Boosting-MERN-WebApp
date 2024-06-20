@@ -18,7 +18,7 @@ pipeline {
                 
 
                 // Build Docker image
-                sh "docker docker run hello-world"  
+                sh "docker run hello-world"  
             }
         }
         
