@@ -4,7 +4,6 @@ pipeline {
     environment {
         AWS_DEFAULT_REGION = 'eu-central-1'
         registry = '507618868373.dkr.ecr.eu-central-1.amazonaws.com'
-
     }
     
     stages {
@@ -23,9 +22,7 @@ pipeline {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: '96f68e7a-e3cb-4e97-97ac-472f07edf015']]) {
                     sh "aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $registry"
                 }
-                
             }
         }
-        
     }
 }
