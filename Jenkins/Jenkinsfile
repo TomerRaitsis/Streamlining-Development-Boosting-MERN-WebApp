@@ -1,0 +1,12 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Verify Clone') {
+            steps {
+                // List files to verify the repository is cloned
+                sh 'ls -la'
+            }
+        }
+    }
+}
