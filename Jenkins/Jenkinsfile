@@ -15,6 +15,8 @@ pipeline {
                 // withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: '96f68e7a-e3cb-4e97-97ac-472f07edf015']]) {
                 //     sh "aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $registry"
                 // }
+
+                sh "ls"
                 
 
                 // Build Docker image
