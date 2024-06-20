@@ -3,15 +3,25 @@ pipeline {
     
     environment {
         AWS_DEFAULT_REGION = 'eu-central-1'
-        registry = credentials('ecr-registry-url') 
-        images = [
-            [name: 'backend-repo', tag: 'latest', path: ''],
-            // [name: 'frontend-repo', tag: 'latest', path: 'frontend/'],
-            // [name: 'db-seeding-repo', tag: 'latest', path: 'seeding-dockerfile/']
-        ]
+        registry // Leave this uninitialized in the environment block
+        imageNameBackend = 'backend-repo'
+        tagBackend = 'latest'
+        imageNameFrontend = 'frontend-repo'
+        tagFrontend = 'latest'
+        imageNameDB = 'db-seeding-repo'
+        tagDB = 'latest'
     }
     
     stages {
+        stage('Initialize Environment') {
+            steps {
+                script {
+                    // Retrieve ECR registry URL from Jenkins credentials
+                    registry = credentials('ecr-registry-url')
+                }
+            }
+        }
+        
         stage('Build and Tag Docker Images') {
             steps {
                 // Authenticate with AWS ECR
@@ -21,19 +31,22 @@ pipeline {
                 
                 // Build and tag each Docker image
                 script {
-                    for (def image in images) {
-                        def imageName = image.name
-                        def tag = image.tag
-                        def path = image.path
-                        
-                        // Navigate to Dockerfile path
-                        dir(path) {
-                            // Build Docker image
-                            sh "docker build -t $imageName:$tag ."
-                            
-                            // Tag Docker image
-                            sh "docker tag $imageName:$tag $registry/$imageName:$tag"
-                        }
+                    // Build and tag backend Docker image
+                    dir('path/to/backend') {
+                        sh "docker build -t $imageNameBackend:$tagBackend ."
+                        sh "docker tag $imageNameBackend:$tagBackend $registry/$imageNameBackend:$tagBackend"
+                    }
+                    
+                    // Build and tag frontend Docker image
+                    dir('path/to/frontend') {
+                        sh "docker build -t $imageNameFrontend:$tagFrontend ."
+                        sh "docker tag $imageNameFrontend:$tagFrontend $registry/$imageNameFrontend:$tagFrontend"
+                    }
+                    
+                    // Build and tag DB seeding Docker image
+                    dir('path/to/db-seeding') {
+                        sh "docker build -t $imageNameDB:$tagDB ."
+                        sh "docker tag $imageNameDB:$tagDB $registry/$imageNameDB:$tagDB"
                     }
                 }
             }
