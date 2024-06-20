@@ -13,12 +13,12 @@ pipeline {
             steps {
 
                 sh "ls"
-                
+
                 sh "pwd"
                 
 
                 // Build Docker image
-                sh "docker build ."  
+                sh "docker docker run hello-world"  
             }
         }
         
