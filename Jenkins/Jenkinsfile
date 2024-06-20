@@ -1,32 +1,18 @@
 pipeline {
     agent any
-
+ 
     environment {
-        AWS_DEFAULT_REGION = 'eu-central-1'  // Update with your AWS region
+        AWS_DEFAULT_REGION = 'eu-central-1'
     }
-
+ 
     stages {
-        stage('Authenticate to AWS') {
+        stage('AWS ECR Describe Repositories') {
             steps {
-                script {
-                    // Run AWS CLI command to list ECR repositories
-                    def awsCliCommand = "aws ecr describe-repositories --output json"
-                    def awsCliOutput = sh(script: awsCliCommand, returnStdout: true).trim()
-
-                    // Print AWS CLI output
-                    echo "AWS ECR Repositories:"
-                    echo awsCliOutput
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: '96f68e7a-e3cb-4e97-97ac-472f07edf015']]) {
+                    sh 'aws ecr describe-repositories --output json'
                 }
             }
         }
-    }
-
-    post {
-        success {
-            echo 'AWS authentication and ECR repositories listing succeeded!'
-        }
-        failure {
-            echo 'AWS authentication or ECR repositories listing failed!'
-        }
+        // Add more stages as needed
     }
 }
