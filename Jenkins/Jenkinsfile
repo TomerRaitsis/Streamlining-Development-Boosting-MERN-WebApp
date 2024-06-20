@@ -1,18 +1,15 @@
 pipeline {
     agent any
     
-    environment {
-        AWS_DEFAULT_REGION = 'eu-central-1'
-        registry = credentials('ecr-registry-url')
-        imageName = 'backend-repo'
-        tag = 'latest'
-    }
-    
     stages {
-        stage('Build and Tag Docker Images') {
+        stage('Run Hello World') {
             steps {
                 script {
-                    docker.image('hello-world').run()
+                    // Set DOCKER_TLS_VERIFY to 0 to disable TLS verification
+                    env.DOCKER_TLS_VERIFY = '0'
+                    
+                    // Run hello-world Docker container
+                    sh 'docker run -d hello-world'
                 }
             }
         }
