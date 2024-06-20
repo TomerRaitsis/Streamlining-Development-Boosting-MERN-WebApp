@@ -3,13 +3,7 @@ pipeline {
     
     environment {
         AWS_DEFAULT_REGION = 'eu-central-1'
-        registry = ''
-        imageNameBackend = 'backend-repo'
-        tagBackend = 'latest'
-        imageNameFrontend = 'frontend-repo'
-        tagFrontend = 'latest'
-        imageNameDB = 'db-seeding-repo'
-        tagDB = 'latest'
+
     }
     
     stages {
@@ -29,29 +23,8 @@ pipeline {
                     sh "aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $registry"
                 }
                 
-                // // Build and tag each Docker image
-                // script {
-                //     // Build and tag backend Docker image
-                //     dir('path/to/backend') {
-                //         sh "docker build -t $imageNameBackend:$tagBackend ."
-                //         sh "docker tag $imageNameBackend:$tagBackend $registry/$imageNameBackend:$tagBackend"
-                //     }
-                    
-                //     // Build and tag frontend Docker image
-                //     dir('path/to/frontend') {
-                //         sh "docker build -t $imageNameFrontend:$tagFrontend ."
-                //         sh "docker tag $imageNameFrontend:$tagFrontend $registry/$imageNameFrontend:$tagFrontend"
-                //     }
-                    
-                //     // Build and tag DB seeding Docker image
-                //     dir('path/to/db-seeding') {
-                //         sh "docker build -t $imageNameDB:$tagDB ."
-                //         sh "docker tag $imageNameDB:$tagDB $registry/$imageNameDB:$tagDB"
-                //     }
-                // }
             }
         }
         
-        // Add more stages as needed
     }
 }
